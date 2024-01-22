@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const { promises } = require('fs');
 const outputFile = 'bundle.css';
@@ -9,13 +8,20 @@ const mergeStyles = (stylesFolderPath, projectFolderPath, outputFileName) => {
   promises
     .readdir(stylesFolderPath, { withFileTypes: true })
     .then((dirents) => {
+      let proms = [];
       for (const dirent of dirents) {
         if (dirent.isFile() && path.extname(dirent.name) === '.css') {
           const styleFilePath = path.join(stylesFolderPath, dirent.name);
-          const styleContent = fs.readFileSync(styleFilePath, 'utf8');
-          styles.push(styleContent);
+          proms.push(
+            promises.readFile(styleFilePath, 'utf8').then((styleContent) => {
+              styles.push(styleContent);
+            }),
+          );
         }
       }
+      return Promise.all(proms);
+    })
+    .then(() => {
       const bundle = styles.join('\n');
       return promises.writeFile(
         path.join(projectFolderPath, outputFileName),
