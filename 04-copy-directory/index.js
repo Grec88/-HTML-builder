@@ -1,7 +1,7 @@
 const path = require('path');
 const { promises } = require('fs');
-const sourceFolder = '04-copy-directory/files';
-const destinationFolder = '04-copy-directory/files-copy';
+const sourceFolder = path.join(__dirname, './files');
+const destinationFolder = path.join(__dirname, './files-copy');
 async function copyDir(source, destination) {
   await promises.mkdir(destination, { recursive: true });
   const files = await promises.readdir(source);
@@ -23,3 +23,5 @@ copyDir(sourceFolder, destinationFolder)
   .catch((err) => {
     console.error(err);
   });
+
+module.exports = copyDir;
