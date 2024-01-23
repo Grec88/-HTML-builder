@@ -6,7 +6,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 console.log(
-  'Please, enter some text.\nPress enter to save the input info to the file\n',
+  'Please, enter some text.\nPress enter to save the input info to the file\nInput some more text or close the process typing exit or pressing ctrl + c.',
 );
 rl.on('line', (input) => {
   if (input === 'exit') {
@@ -19,6 +19,11 @@ rl.on('line', (input) => {
     );
   }
 });
+
+rl.on('close', () => {
+  console.log('Goodbye!');
+});
+
 process.on('SIGINT', () => {
   rl.close();
 });
